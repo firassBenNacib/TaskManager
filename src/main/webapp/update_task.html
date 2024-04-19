@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Task</title>
+</head>
+<body>
+
+<h2>Update Task</h2>
+<form id="updateTaskForm">
+    <input type="hidden" id="taskId" name="taskId" value=""/> <!-- Hidden field for storing task ID -->
+
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title" required><br><br>
+
+    <label for="description">Description:</label>
+    <textarea id="description" name="description"></textarea><br><br>
+
+    <label for="dueDate">Due Date:</label>
+    <input type="date" id="dueDate" name="dueDate"><br><br>
+
+    <label for="completed">Completed:</label>
+    <select id="completed" name="completed">
+        <option value="false">No</option>
+        <option value="true">Yes</option>
+    </select><br><br>
+
+    <input type="submit" value="Update Task">
+</form>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function() {
+        var taskId = getQueryVariable("id");
+        if (taskId) {
+            fetchTask(taskId); 
+        }
+
+        $('#updateTaskForm').submit(function(event) {
+            event.preventDefault();
+            var taskData = {
+                id: $('#taskId').val(),
+                title: $('#title').val(),
+                description: $('#description').val(),
+                dueDate: $('#dueDate').val(),
+                completed: $('#completed').val() === 'true'
+            };
+
+            var baseUrl = window.location.protocol + "//" + window.location.host + "/TaskManager/api/tasks/";
+
+            $.ajax({
+                url: baseUrl + taskId,
+                type: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify(taskData),
+                dataType: 'json',
+                success: function(data) {
+                    alert('Task updated successfully');
+                    window.location.href = 'index.html'; 
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    alert('Error updating task: ' + errorThrown);
+                }
+            });
+        });
+
+        function fetchTask(taskId) {
+            var baseUrl = window.location.protocol + "//" + window.location.host + "/TaskManager/api/tasks/";
+
+            $.ajax({
+                url: baseUrl + taskId,
+                type: 'GET',
+                dataType: 'json',
+                success: function(task) {
+                    $('#taskId').val(task.id);
+                    $('#title').val(task.title);
+                    $('#description').val(task.description);
+                    $('#dueDate').val(task.dueDate);
+                    $('#completed').val(task.completed.toString());
+                },
+                error: function() {
+                    alert('Error loading task data');
+                }
+            });
+        }
+
+        function getQueryVariable(variable) {
+            var query = window.location.search.substring(1);
+            var vars = query.split('&');
+            for (var i = 0; i < vars.length; i++) {
+                var pair = vars[i].split('=');
+                if (decodeURIComponent(pair[0]) === variable) {
+                    return decodeURIComponent(pair[1]);
+                }
+            }
+            return false;
+        }
+    });
+</script>
+
+</body>
+<a href="index.html">Back to Task List</a>
+</html>

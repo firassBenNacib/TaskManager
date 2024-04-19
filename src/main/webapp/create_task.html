@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Task</title>
+</head>
+<body>
+
+<h2>Add New Task</h2>
+<form id="addTaskForm">
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title" required><br><br>
+
+    <label for="description">Description:</label>
+    <textarea id="description" name="description"></textarea><br><br>
+
+    <label for="dueDate">Due Date:</label>
+    <input type="date" id="dueDate" name="dueDate"><br><br>
+
+    <label for="completed">Completed:</label>
+    <select id="completed" name="completed">
+        <option value="false">No</option>
+        <option value="true">Yes</option>
+    </select><br><br>
+
+    <input type="submit" value="Add Task">
+</form>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#addTaskForm').submit(function(event) {
+            event.preventDefault();
+            var taskData = {
+                title: $('#title').val(),
+                description: $('#description').val(),
+                dueDate: $('#dueDate').val(),
+                completed: $('#completed').val() === 'true'
+            };
+
+            var baseUrl = window.location.protocol + "//" + window.location.host + "/TaskManager/api/tasks/";
+
+            $.ajax({
+                url: baseUrl,
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(taskData),
+                dataType: 'json',
+                success: function(data) {
+                    alert('Task added successfully');
+                    window.location.href = 'index.html'; 
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    alert('Error adding task: ' + errorThrown);
+                }
+            });
+        });
+    });
+</script>
+
+</body>
+<a href="index.html">Back to Task List</a>
+</html>
