@@ -55,8 +55,9 @@ public class TaskServiceTest {
     @Test
     void testSaveTaskUpdate() {
         Task existingTask = new Task(1L, "Existing Task", "Description", null, true);
-        doNothing().when(taskDAO).update(existingTask);
+  
         assertDoesNotThrow(() -> taskService.saveTask(existingTask));
+        verify(taskDAO).update(existingTask);  
     }
 
     @Test
