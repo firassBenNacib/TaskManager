@@ -30,9 +30,9 @@ public class TaskResource {
 
     @POST
     public Response createTask(Task task) {
-        taskService.saveTask(task);
-        return Response.status(Response.Status.CREATED).entity(task).build();
+        return taskService.saveTask(task);
     }
+
 
     @PUT
     @Path("/{id}")

@@ -46,24 +46,37 @@ public class TaskResourceTest {
     }
 
     @Test
-void testCreateTask() {
-    Task newTask = new Task(null, "New Task", "Description", null, false);
-    doNothing().when(taskService).saveTask(any(Task.class));
-    Response response = taskResource.createTask(newTask);
-    assertEquals(Response.Status.CREATED.getStatusCode(), response.getStatus());
-}
+    void testCreateTask() {
+        Task newTask = new Task(null, "New Task", "Description", null, false);
+        when(taskService.saveTask(any(Task.class))).thenReturn(Response.status(Response.Status.CREATED).entity(newTask).build());
+        Response response = taskResource.createTask(newTask);
+        assertEquals(Response.Status.CREATED.getStatusCode(), response.getStatus());
+        verify(taskService).saveTask(newTask);
+    }
 
-@Test
-void testUpdateTask() {
-    Task updatedTask = new Task(1L, "Updated Task", "Updated Description", null, false);
-    doNothing().when(taskService).saveTask(any(Task.class));
-    Task result = taskResource.updateTask(1L, updatedTask);
-    assertEquals(updatedTask, result);
-}
+    @Test
+    void testCreateTaskWithExistingTitle() {
+        Task newTask = new Task(null, "Existing Title", "Description", null, false);
+        when(taskService.saveTask(any(Task.class))).thenReturn(Response.status(Response.Status.CONFLICT).entity("Task with the title already exists.").build());
+        Response response = taskResource.createTask(newTask);
+        assertEquals(Response.Status.CONFLICT.getStatusCode(), response.getStatus());
+        verify(taskService).saveTask(newTask);
+    }
+
+    @Test
+    void testUpdateTask() {
+        Task updatedTask = new Task(1L, "Updated Task", "Updated Description", null, false);
+        when(taskService.saveTask(any(Task.class))).thenReturn(Response.status(Response.Status.OK).entity(updatedTask).build());
+        Task result = taskResource.updateTask(1L, updatedTask);
+        assertEquals(updatedTask, result);
+        verify(taskService).saveTask(updatedTask);
+    }
 
     @Test
     void testDeleteTask() {
+        doNothing().when(taskService).deleteTask(1L);
         Response response = taskResource.deleteTask(1L);
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatus());
+        verify(taskService).deleteTask(1L);
     }
 }

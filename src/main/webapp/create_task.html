@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Add Task</title>
+    <style>
+        .success { color: green; }
+        .error { color: red; }
+    </style>
 </head>
 <body>
 
@@ -23,22 +27,35 @@
         <option value="true">Yes</option>
     </select><br><br>
 
-    <input type="submit" value="Add Task">
+    <input type="submit" id="submit" value="Add Task">
 </form>
+
+<!-- Place for displaying messages -->
+<div id="message"></div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
     $(document).ready(function() {
         $('#addTaskForm').submit(function(event) {
             event.preventDefault();
+            var dueDate = $('#dueDate').val();
+            var datePattern = /^\d{4}-\d{2}-\d{2}$/; 
+
+            if (!datePattern.test(dueDate)) {
+                $('#message').text('Invalid date format. Please enter a date in YYYY-MM-DD format.').addClass('error').removeClass('success');
+                return; 
+            }
+
             var taskData = {
                 title: $('#title').val(),
                 description: $('#description').val(),
-                dueDate: $('#dueDate').val(),
+                dueDate: dueDate,
                 completed: $('#completed').val() === 'true'
             };
 
-            var baseUrl = window.location.protocol + "//" + window.location.host + "/TaskManager/api/tasks/";
+            console.log("Due Date Sent:", taskData.dueDate); 
+
+            var baseUrl = window.location.protocol + "//" + window.location.host + "/TaskManager/api/tasks";
 
             $.ajax({
                 url: baseUrl,
@@ -47,17 +64,24 @@
                 data: JSON.stringify(taskData),
                 dataType: 'json',
                 success: function(data) {
-                    alert('Task added successfully');
-                    window.location.href = 'index.html'; 
+                    $('#message').text('Task added successfully').addClass('success').removeClass('error');
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
-                    alert('Error adding task: ' + errorThrown);
+                    var message = 'Unknown error occurred';
+                    try {
+                        var response = JSON.parse(jqXHR.responseText);
+                        message = response.message || message;
+                    } catch (e) {
+                        message = jqXHR.responseText || errorThrown;
+                    }
+                    $('#message').text('Error adding task: ' + message).addClass('error').removeClass('success');
                 }
+                 
             });
         });
     });
 </script>
 
-</body>
 <a href="index.html">Back to Task List</a>
+</body>
 </html>

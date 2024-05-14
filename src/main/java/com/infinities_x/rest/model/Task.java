@@ -1,5 +1,6 @@
 package com.infinities_x.rest.model;
 
+import javax.json.bind.annotation.JsonbDateFormat;
 import javax.persistence.*;
 import java.time.LocalDate;
 
@@ -18,7 +19,9 @@ public class Task {
     private String description;
 
     @Column(name = "due_date")
+    @JsonbDateFormat(value = "yyyy-MM-dd")
     private LocalDate dueDate;
+
 
     @Column(name = "completed")
     private boolean completed;

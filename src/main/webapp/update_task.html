@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Update Task</title>
+    <style>
+        .success { color: green; }
+        .error { color: red; }
+    </style>
 </head>
 <body>
 
@@ -25,8 +29,11 @@
         <option value="true">Yes</option>
     </select><br><br>
 
-    <input type="submit" value="Update Task">
+    <input type="submit" id="submit" value="Update Task">
 </form>
+
+<!-- Place for displaying messages -->
+<div id="message" style="display: none;"></div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
@@ -46,29 +53,25 @@
                 completed: $('#completed').val() === 'true'
             };
 
-            var baseUrl = window.location.protocol + "//" + window.location.host + "/TaskManager/api/tasks/";
-
+            var baseUrl = window.location.protocol + "//" + window.location.host + "/TaskManager/api/tasks/" + taskId;
             $.ajax({
-                url: baseUrl + taskId,
+                url: baseUrl,
                 type: 'PUT',
                 contentType: 'application/json',
                 data: JSON.stringify(taskData),
-                dataType: 'json',
                 success: function(data) {
-                    alert('Task updated successfully');
-                    window.location.href = 'index.html'; 
+                    $('#message').text('Task updated successfully').addClass('success').removeClass('error').show();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
-                    alert('Error updating task: ' + errorThrown);
+                    $('#message').text('Error updating task: ' + textStatus + '; ' + errorThrown).addClass('error').removeClass('success').show();
                 }
             });
         });
 
         function fetchTask(taskId) {
-            var baseUrl = window.location.protocol + "//" + window.location.host + "/TaskManager/api/tasks/";
-
+            var baseUrl = window.location.protocol + "//" + window.location.host + "/TaskManager/api/tasks/" + taskId;
             $.ajax({
-                url: baseUrl + taskId,
+                url: baseUrl,
                 type: 'GET',
                 dataType: 'json',
                 success: function(task) {
@@ -98,6 +101,6 @@
     });
 </script>
 
-</body>
 <a href="index.html">Back to Task List</a>
+</body>
 </html>

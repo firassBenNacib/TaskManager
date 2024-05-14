@@ -30,4 +30,11 @@ public class TaskDAO {
     public void delete(Task task) {
         em.remove(task);
     }
+    public boolean existsByTitle(String title) {
+        Long count = em.createQuery("SELECT COUNT(t) FROM Task t WHERE t.title = :title", Long.class)
+                       .setParameter("title", title)
+                       .getSingleResult();
+        return count > 0;
+    }
+
 }
