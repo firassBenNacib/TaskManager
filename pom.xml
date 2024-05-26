@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.infinities_x</groupId>
     <artifactId>TaskManager</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1-QA-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <properties>
@@ -141,14 +141,14 @@
         </plugins>
     </build>
 
-    <distributionManagement>
-        <repository>
-            <id>deploymentRepo</id>
-            <url>http://172.21.146.157:8081/repository/maven-releases/</url>
-        </repository>
-        <snapshotRepository>
-            <id>deploymentRepo</id>
-            <url>http://172.21.146.157:8081/repository/maven-snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
+  <distributionManagement>
+    <repository>
+      <id>deploymentRepo</id>
+      <url>http://172.21.146.157:8081/repository/maven-releases/</url>
+    </repository>
+    <snapshotRepository>
+      <id>qaRepo</id>
+      <url>http://172.21.146.157:8081/repository/maven-snapshots/</url>
+    </snapshotRepository>
+  </distributionManagement>
 </project>
