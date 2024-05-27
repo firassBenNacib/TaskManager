@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('CheckOut') {
             steps {
-                git branch: 'main', url: 'https://github.com/firassBenNacib/TaskManager.git', credentialsId: 'github-creds'
+                git branch: 'Dev', url: 'https://github.com/firassBenNacib/TaskManager.git', credentialsId: 'github-creds'
             }
         }
         
