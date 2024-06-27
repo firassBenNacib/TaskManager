@@ -19,7 +19,7 @@
     <textarea id="description" name="description"></textarea><br><br>
 
     <label for="dueDate">Due Date:</label>
-    <input type="date" id="dueDate" name="dueDate"><br><br>
+    <input type="date" id="dueDate" name="dueDate" required><br><br>
 
     <label for="completed">Completed:</label>
     <select id="completed" name="completed">
@@ -39,11 +39,11 @@
         $('#addTaskForm').submit(function(event) {
             event.preventDefault();
             var dueDate = $('#dueDate').val();
-            var datePattern = /^\d{4}-\d{2}-\d{2}$/; 
+            var datePattern = /^\d{4}-\d{2}-\d{2}$/;
 
             if (!datePattern.test(dueDate)) {
                 $('#message').text('Invalid date format. Please enter a date in YYYY-MM-DD format.').addClass('error').removeClass('success');
-                return; 
+                return;
             }
 
             var taskData = {
@@ -53,7 +53,7 @@
                 completed: $('#completed').val() === 'true'
             };
 
-            console.log("Due Date Sent:", taskData.dueDate); 
+            console.log("Due Date Sent:", taskData.dueDate);
 
             var baseUrl = window.location.protocol + "//" + window.location.host + "/TaskManager/api/tasks";
 
@@ -76,7 +76,6 @@
                     }
                     $('#message').text('Error adding task: ' + message).addClass('error').removeClass('success');
                 }
-                 
             });
         });
     });
