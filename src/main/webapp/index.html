@@ -55,7 +55,7 @@ $(document).ready(function() {
             var completedText = task.completed ? 'Yes' : 'No';
             var updateButton = '<button onclick="location.href=\'update_task.html?id=' + task.id + '\'">Update</button>';
             var deleteButton = '<button onclick="deleteTask(' + task.id + ')">Delete</button>';
-            $('#tasksTable tbody').append('<tr><td>' + task.id + '</td><td>' + task.title + '</td><td>' + task.description + '</td><td>' + task.dueDate + '</td><td>' + completedText + '</td><td>' + updateButton + ' ' + deleteButton + '</td></tr>');
+            $('#tasksTable tbody').append('</td><td>' + task.title + '</td><td>' + task.description + '</td><td>' + task.dueDate + '</td><td>' + completedText + '</td><td>' + updateButton + ' ' + deleteButton + '</td></tr>');
         });
     }
 
